@@ -7,8 +7,8 @@ description = "Cairo language support for the Zed editor"
 repository = "https://github.com/trbutler4/zed-cairo"
 
 [grammars.cairo]
-repository = "https://github.com/JoranHonig/tree-sitter-cairo"
-commit = "127f38a6c03d009ccf5798cf0eaad7d5df982445"
+repository = "https://github.com/trbutler4/tree-sitter-cairo"
+commit = "ee87b0e415eff54a17e5bef5945b989ca11a0e0e"
 
 [language_servers.cairo]
 name = "Cairo LSP"
