@@ -1,0 +1,8 @@
+id = "zed-cairo"
+name = "Cairo"
+version = "0.0.1"
+schema_version = 1
+authors = ["Thomas Robert Butler IV trbiv@proton.me"]
+description = "Cairo language support for the Zed editor"
+repository = "https://github.com/trbutler4/zed-cairo"
+
