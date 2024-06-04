@@ -13,16 +13,16 @@ impl zed::Extension for CairoExtension {
         _language_server_id: &zed::LanguageServerId,
         worktree: &zed::Worktree,
     ) -> zed::Result<zed::Command> {
-        let lsp_args = vec!["--stdio".into()];
+        let lsp_args = vec!["cairo-language-server".into(), "--stdio".into()];
         let (command, args) = match worktree.which("scarb") {
-            Some(command) => {
-                println!("Using scarb from {:?}", command);
-                (command, lsp_args)
-            }
-            None => {
-                println!("scarb not found in path");
-                ("$HOME/.local/bin/scarb".into(), lsp_args)
-            }
+            Some(command) => (command, lsp_args),
+            None => (
+                "node".into(),
+                vec![
+                    "./cairo-ls/node_modules/cairo-ls/out/server.js".into(),
+                    "--stdio".into(),
+                ],
+            ),
         };
         Ok(zed::Command {
             command,
