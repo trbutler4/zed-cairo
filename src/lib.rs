@@ -10,7 +10,7 @@ impl zed::Extension for CairoExtension {
 
     fn language_server_command(
         &mut self,
-        language_server_id: &zed::LanguageServerId,
+        _language_server_id: &zed::LanguageServerId,
         worktree: &zed::Worktree,
     ) -> zed::Result<zed::Command> {
         let lsp_args = vec!["--stdio".into()];
