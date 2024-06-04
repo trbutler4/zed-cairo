@@ -4,7 +4,7 @@ use zed::settings::LspSettings;
 use zed::Worktree;
 use zed_extension_api as zed;
 
-const SERVER_PATH: &str = "cairo-ls/node_modules/cairo-ls/server.js";
+const SERVER_PATH: &str = "node_modules/cairo-ls/out/server.js";
 const CAIRO_LS_PACKAGE: &str = "cairo-ls";
 
 struct CairoExtension {
@@ -40,7 +40,7 @@ impl CairoExtension {
             match result {
                 Ok(_) => {
                     if !self.cairo_ls_exists() {
-                        Err(format!("installed package `{CAIRO_LS_PACKAGE}` did not contain expected path '{SERVER_PATH}'"))?;
+                        Err(format!("installed package '{CAIRO_LS_PACKAGE}' did not contain expected path '{SERVER_PATH}'"))?;
                     }
                 }
                 Err(e) => {
@@ -71,12 +71,18 @@ impl zed::Extension for CairoExtension {
         language_server_id: &zed::LanguageServerId,
         worktree: &zed::Worktree,
     ) -> zed::Result<zed::Command> {
-        let (command, args) = match worktree.which("TODO") {
-            Some(command) => (command, vec![]),
+        let (command, args) = match worktree.which("scarb") {
+            Some(command) => (
+                command,
+                vec!["cairo-language-server".into(), "--stdio".into()],
+            ),
             None => {
-                let server_path = self.cairo_ls_script_path(language_server_id)?;
-                let node = env::var("NODE").unwrap_or_else(|_| "node".to_string());
-                (node, vec![server_path, "--stdio".into()])
+                let script_path = self.cairo_ls_script_path(language_server_id)?;
+                let current_dir = env::current_dir().unwrap();
+                let ls_script = current_dir.join(&script_path).to_string_lossy().to_string();
+                let command = zed::node_binary_path()?;
+                let args = vec![ls_script.into(), "--stdio".into()];
+                (command, args)
             }
         };
         Ok(zed::Command {
