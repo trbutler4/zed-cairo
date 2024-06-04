@@ -1,98 +1,53 @@
+; identifiers
 
-; --------------- Identifiers ------------------
-(identifier) @variable
+;(pattern_identifier) @constructor
 
-; --------------- Literals ---------------------
-[
-    (string)
-] @string
+; Literals
 
-[
-    (number_literal)
-] @number
+(integer_literal) @number
+
+(boolean_expression) @constant.builtin
+
+(comment) @comment
+
+; Definitions and references
+(primitive_type) @type.builtin
+
+(path_expression) @type
+
+(use name: (path_expression) @type)
+(module name: (identifier) @type)
+(free_function name: (identifier) @type)
+(extern_function name: (identifier) @type)
+(extern_type name: (identifier) @type)
+(trait name: (identifier) @type)
+(impl name: (identifier) @type)
+(struct name: (identifier) @type)
+(enum name: (identifier) @type)
+
+; calls and constructions
+(function_call_expression name: (path_expression) @identifier)
+(struct_ctor_call_expression name: (path_expression) @identifier)
 
 
-; --------------- Definitions ------------------
-(fn_definition
-    name: (identifier) @function)
+; Tokens
+"use" @keyword
+"mod" @keyword
+"func" @keyword
+"extern" @keyword
+"trait" @keyword
+"impl" @keyword
+"struct" @keyword
+"of" @keyword
+"let" @keyword
+"return" @keyword
+"if" @keyword
+"else" @keyword
+"match" @keyword
 
-;[
-;    (keyword_true)
-;    (keyword_false)
-;] @boolean
-
-; keywords
-
-; [
-;   "as",
-;   "break",
-;   "const",
-;   "continue",
-;   "else",
-;   "enum",
-;   "extern",
-;   "false",
-;   "fn",
-;   "if",
-;   "impl",
-;   "implicits",
-;   "let",
-;   "loop",
-;   "match",
-;   "mod",
-;   "mut",
-;   "nopanic",
-;   "of",
-;   "pub",
-;   "ref",
-;   "return",
-;   "struct",
-;   "trait",
-;   "true",
-;   "type",
-;   "use",
-;   "while",
-; ] @keyword
-
-; 'loose' keywords
-; ["self", "super"] @keyword.loose
-
-; 'reservered' keywords
-; [
-;   "Self",
-;   "do",
-;   "dyn",
-;   "for",
-;   "hint",
-;   "in",
-;   "macro",
-;   "move",
-;   "static_assert",
-;   "static",
-;   "try",
-;   "typeof",
-;   "unsafe",
-;   "where",
-;   "with",
-;   "yield"
-; ] @keyword.reserved
-
-; ; Built-in functions
-; [
-;   "assert",
-;   "panic"
-; ] @function.builtin
-
-; ; Operators
-; [
-;   "!",
-;   "~",
-;   "!=",
-;   "%",
-;   "%=",
-;   "&",
-;   "&&",
-;   "*",
-;   "*=",
-;   "@",
-; ] @operator
+"(" @punctuation.bracket
+")" @punctuation.bracket
+"[" @punctuation.bracket
+"]" @punctuation.bracket
+"{" @punctuation.bracket
+"}" @punctuation.bracket
