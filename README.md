@@ -1,3 +1,3 @@
 # zed-cairo
 
-Cairo language support for Zed.
+***WIP*** blazing fast Cairo language support for Zed
