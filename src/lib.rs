@@ -15,8 +15,14 @@ impl zed::Extension for CairoExtension {
     ) -> zed::Result<zed::Command> {
         let lsp_args = vec!["--stdio".into()];
         let (command, args) = match worktree.which("scarb") {
-            Some(command) => (command, lsp_args),
-            None => ("scarb".into(), lsp_args), // TODO: handle this case
+            Some(command) => {
+                println!("Using scarb from {:?}", command);
+                (command, lsp_args)
+            }
+            None => {
+                println!("scarb not found in path");
+                ("$HOME/.local/bin/scarb".into(), lsp_args)
+            }
         };
         Ok(zed::Command {
             command,
