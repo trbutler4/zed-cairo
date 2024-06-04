@@ -6,3 +6,6 @@ authors = ["Thomas Robert Butler IV trbiv@proton.me"]
 description = "Cairo language support for the Zed editor"
 repository = "https://github.com/trbutler4/zed-cairo"
 
+[grammars.cairo]
+repository = "https://github.com/JoranHonig/tree-sitter-cairo"
+commit = "127f38a6c03d009ccf5798cf0eaad7d5df982445"
