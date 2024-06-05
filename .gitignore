@@ -1,3 +1,6 @@
-# Added by cargo
 
+# zed extension specific
+extension.wasm
+
+# Added by cargo
 /target
