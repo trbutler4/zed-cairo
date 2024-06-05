@@ -1,3 +1,5 @@
 # zed-cairo
 
-***WIP*** blazing fast Cairo language support for Zed
+**Work In Progress** 
+
+Cairo language support for Zed
