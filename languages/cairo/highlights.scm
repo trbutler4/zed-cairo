@@ -33,7 +33,7 @@
 ; Tokens
 "use" @keyword
 "mod" @keyword
-"func" @keyword
+"fn" @keyword
 "extern" @keyword
 "trait" @keyword
 "impl" @keyword
