@@ -5,6 +5,7 @@
 ; Literals
 
 (integer_literal) @number
+(string_literal) @string
 
 (boolean_expression) @constant.builtin
 
