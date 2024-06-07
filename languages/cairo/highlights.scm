@@ -45,6 +45,7 @@
 "if" @keyword
 "else" @keyword
 "match" @keyword
+"while" @keyword
 
 "(" @punctuation.bracket
 ")" @punctuation.bracket
