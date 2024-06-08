@@ -8,7 +8,7 @@ repository = "https://github.com/trbutler4/zed-cairo"
 
 [grammars.cairo]
 repository = "https://github.com/trbutler4/tree-sitter-cairo"
-commit = "b40e198e09ea9dc99e7f0dae34f6e049658f9301"
+commit = "cecb1aff99da04ad12f0a95839fbc172bd6609ff"
 
 [language_servers.cairo]
 name = "Cairo LSP"
