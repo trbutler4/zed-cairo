@@ -1,6 +1,7 @@
 
 # zed extension specific
 extension.wasm
+grammars/cairo
 
 # Added by cargo
 /target
