@@ -46,6 +46,7 @@
 "else" @keyword
 "match" @keyword
 "while" @keyword
+"pub" @keyword
 
 "(" @punctuation.bracket
 ")" @punctuation.bracket
