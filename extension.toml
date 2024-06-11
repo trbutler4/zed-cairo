@@ -1,4 +1,4 @@
-id = "zed-cairo"
+id = "cairo"
 name = "Cairo"
 version = "0.0.1"
 schema_version = 1
