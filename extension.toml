@@ -7,7 +7,7 @@ description = "Cairo language support for the Zed editor"
 repository = "https://github.com/trbutler4/zed-cairo"
 
 [grammars.cairo]
-repository = "https://github.com/trbutler4/tree-sitter-cairo"
+repository = "https://github.com/tree-sitter-grammars/tree-sitter-cairo"
 commit = "fe76a8af8b795a73028129d14a4879b3745db016"
 
 [language_servers.cairo]
