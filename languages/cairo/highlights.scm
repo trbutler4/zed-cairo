@@ -1,338 +1,368 @@
-; Preproc
+; -------
+; Tree-Sitter doesn't allow overrides in regards to captures,
+; though it is possible to affect the child node of a captured
+; node. Thus, the approach here is to flip the order so that
+; overrides are unnecessary.
+; -------
+
+; -------
+; Types
+; -------
+
+(type_parameters
+  (type_identifier) @type.parameter)
+(constrained_type_parameter
+  left: (type_identifier) @type.parameter)
+
+; ---
+; Primitives
+; ---
+
+(primitive_type) @type.builtin
+(boolean_literal) @constant.builtin.boolean
+(numeric_literal) @constant.numeric.integer
+[
+  (string_literal)
+  (shortstring_literal)
+] @string
+[
+  (line_comment)
+] @comment
+
+; ---
+; Extraneous
+; ---
+
+(enum_variant (identifier) @type.enum.variant)
+
+(field_initializer
+  (field_identifier) @variable.other.member)
+(shorthand_field_initializer
+  (identifier) @variable.other.member)
+(shorthand_field_identifier) @variable.other.member
+
+
+; ---
+; Punctuation
+; ---
 
 [
-  "%builtins"
-  "%lang"
-] @preproc
-
-; Includes
-
-(import_statement [ "from" "import" ] @include module_name: (dotted_name (identifier) @namespace . ))
+  "::"
+  "."
+  ";"
+  ","
+] @punctuation.delimiter
 
 [
-  "as"
-  "use"
-  "mod"
-] @include
+  "("
+  ")"
+  "["
+  "]"
+  "{"
+  "}"
+] @punctuation.bracket
+(type_arguments
+  [
+    "<"
+    ">"
+  ] @punctuation.bracket)
+(type_parameters
+  [
+    "<"
+    ">"
+  ] @punctuation.bracket)
 
+; ---
 ; Variables
+; ---
 
-(identifier) @variable
+(let_declaration
+  pattern: [
+    ((identifier) @variable)
+    ((tuple_pattern
+      (identifier) @variable))
+  ])
+  
+; It needs to be anonymous to not conflict with `call_expression` further below. 
+(_
+ value: (field_expression
+  value: (identifier)? @variable
+  field: (field_identifier) @variable.other.member))
 
-; Namespaces
+(parameter
+	pattern: (identifier) @variable.parameter)
 
-(namespace_definition (identifier) @namespace)
-
-(mod_item
-  name: (identifier) @namespace)
-
-(use_list (self) @namespace)
-
-(scoped_use_list (self) @namespace)
-
-(scoped_identifier
-  path: (identifier) @namespace)
-
-(scoped_identifier
- (scoped_identifier
-  name: (identifier) @namespace))
-
-(scoped_type_identifier
-  path: (identifier) @namespace)
-
-((scoped_identifier
-  path: (identifier) @type)
- (#lua-match? @type "^[A-Z]"))
-
-((scoped_identifier
-    name: (identifier) @type)
- (#lua-match? @type "^[A-Z]"))
-
-((scoped_identifier
-    name: (identifier) @constant)
- (#lua-match? @constant "^[A-Z][A-Z%d_]*$"))
-
-((scoped_identifier
-  path: (identifier) @type
-  name: (identifier) @constant)
-  (#lua-match? @type "^[A-Z]")
-  (#lua-match? @constant "^[A-Z]"))
-
-((scoped_type_identifier
-  path: (identifier) @type
-  name: (type_identifier) @constant)
-  (#lua-match? @type "^[A-Z]")
-  (#lua-match? @constant "^[A-Z]"))
-
-(scoped_use_list
-  path: (identifier) @namespace)
-
-(scoped_use_list
-  path: (scoped_identifier
-          (identifier) @namespace))
-
-(use_list (scoped_identifier (identifier) @namespace . (_)))
-
-(use_list (identifier) @type (#lua-match? @type "^[A-Z]"))
-
-(use_as_clause alias: (identifier) @type (#lua-match? @type "^[A-Z]"))
-
+; -------
 ; Keywords
+; -------
+
+((identifier) @keyword.control
+  (#match? @keyword.control "^yield$"))
+
 
 [
-  ; 0.x
-  "using"
-  "namespace"
-  "struct"
-  "let"
-  "const"
-  "local"
-  "rel"
-  "abs"
-  "dw"
-  "alloc_locals"
-  (inst_ret)
-  "with_attr"
-  "with"
-  "call"
-  "nondet"
+  "match"
+  "if"
+  "else"
+] @keyword.control.conditional
 
-  ; 1.0
-  "type"
+[
+  "while"
+  "loop"
+] @keyword.control.repeat
+
+[
+  "break"
+  "continue"
+  "return"
+] @keyword.control.return
+
+"use" @keyword.control.import
+(mod_item "mod" @keyword.control.import !body)
+(use_as_clause "as" @keyword.control.import)
+
+
+[
+  (crate)
+  (super)
+  "as"
+  "pub"
+  "mod"
+  (extern)
+  (nopanic)
+
   "impl"
-  "implicits"
-  "of"
-  "ref"
-  "mut"
   "trait"
-  "enum"
+  "of"
+
+  "default"
 ] @keyword
 
 [
-  "func"
-  "fn"
-  "end"
-] @keyword.function
+  "struct"
+  "enum"
+  "type"
+] @keyword.storage.type
 
-"return" @keyword.return
+"let" @keyword.storage
+"fn" @keyword.function
 
-[
-  "cast"
-  "new"
-  "and"
-] @keyword.operator
+(mutable_specifier) @keyword.storage.modifier.mut
+(ref_specifier) @keyword.storage.modifier.ref
 
-[
-  "tempvar"
-  "extern"
-] @storageclass
+(snapshot_type "@" @keyword.storage.modifier.ref)
 
 [
-  "if"
-  "else"
-  "match"
-] @conditional
+  "const"
+  "ref"
+] @keyword.storage.modifier
 
-[
-  "loop"
-] @repeat
+; TODO: variable.mut to highlight mutable identifiers via locals.scm
 
-[
-  "assert"
-  "static_assert"
-  "nopanic"
-] @exception
+; -------
+; Constructors
+; -------
+; TODO: this is largely guesswork, remove it once we get actual info from locals.scm or r-a
 
-; Fields
+(struct_expression
+  name: (type_identifier) @constructor)
 
-(implicit_arguments (typed_identifier (identifier) @field))
+(tuple_enum_pattern
+  type: [
+    (identifier) @constructor
+    (scoped_identifier
+      name: (identifier) @constructor)
+  ])
+(struct_pattern
+  type: [
+    ((type_identifier) @constructor)
+    (scoped_type_identifier
+      name: (type_identifier) @constructor)
+  ])
+(match_pattern
+  ((identifier) @constructor) (#match? @constructor "^[A-Z]"))
+(or_pattern
+  ((identifier) @constructor)
+  ((identifier) @constructor)
+  (#match? @constructor "^[A-Z]"))
 
-(member_expression "." (identifier) @field)
-
-(call_expression (assignment_expression left: (identifier) @field))
-
-(tuple_expression (assignment_expression left: (identifier) @field))
-
-(field_identifier) @field
-
-(shorthand_field_initializer (identifier) @field)
-
-; Parameters
-
-(arguments (typed_identifier (identifier) @parameter))
-
-(call_expression (tuple_expression (assignment_expression left: (identifier) @parameter)))
-
-(return_type (tuple_type (named_type . (identifier) @parameter)))
-
-(parameter (identifier) @parameter)
-
-; Builtins
-
-(builtin_directive (identifier) @variable.builtin)
-(lang_directive (identifier) @variable.builtin)
-
-[
-  "ap"
-  "fp"
-  (self)
-] @variable.builtin
-
-; Functions
-
-(function_definition "func" (identifier) @function)
-(function_definition "fn" (identifier) @function)
-(function_signature "fn" (identifier) @function)
-(extern_function_statement (identifier) @function)
-
-(call_expression
-  function: (identifier) @function.call)
-
-(call_expression
-  function: (scoped_identifier
-              (identifier) @function.call .))
-
-(call_expression
-  function: (field_expression
-    field: (field_identifier) @function.call))
-
-[
-  "jmp"
-] @function.builtin
-
-; Types
-
-(struct_definition . (identifier) @type (typed_identifier (identifier) @field)?)
-
-(named_type (identifier) @type .)
-
-[
-  (builtin_type)
-  (primitive_type)
-] @type.builtin
-
-((identifier) @type
-  (#lua-match? @type "^[A-Z][a-zA-Z0-9_]*$"))
-
-(type_identifier) @type
-
-; Constants
+; -------
+; Guess Other Types
+; -------
 
 ((identifier) @constant
-  (#lua-match? @constant "^[A-Z_][A-Z0-9_]*$"))
+ (#match? @constant "^[A-Z][A-Z\\d_]*$"))
 
-(enum_variant
-  name: (identifier) @constant)
+; ---
+; PascalCase identifiers in call_expressions (e.g. `Ok()`)
+; are assumed to be enum constructors.
+; ---
 
 (call_expression
-  function: (scoped_identifier
-    "::"
-    name: (identifier) @constant)
-  (#lua-match? @constant "^[A-Z]"))
+  function: [
+    ((identifier) @constructor
+      (#match? @constructor "^[A-Z]"))
+    (scoped_identifier
+      name: ((identifier) @constructor
+        (#match? @constructor "^[A-Z]")))
+  ])
 
-((match_arm
-   pattern: (match_pattern (identifier) @constant))
- (#lua-match? @constant "^[A-Z]"))
+; ---
+; PascalCase identifiers under a path which is also PascalCase
+; are assumed to be constructors if they have methods or fields.
+; ---
 
-((match_arm
-   pattern: (match_pattern
-     (scoped_identifier
-       name: (identifier) @constant)))
- (#lua-match? @constant "^[A-Z]"))
+(field_expression
+  value: (scoped_identifier
+    path: [
+      (identifier) @type
+      (scoped_identifier
+        name: (identifier) @type)
+    ]
+    name: (identifier) @constructor
+      (#match? @type "^[A-Z]")
+      (#match? @constructor "^[A-Z]")))
 
-((identifier) @constant.builtin
- (#any-of? @constant.builtin "Some" "None" "Ok" "Err"))
+; ---
+; Other PascalCase identifiers are assumed to be structs.
+; ---
 
-; Constructors
+((identifier) @type
+  (#match? @type "^[A-Z]"))
 
-(unary_expression "new" (call_expression . (identifier) @constructor))
+; -------
+; Functions
+; -------
 
-((call_expression . (identifier) @constructor)
-  (#lua-match? @constructor "^%u"))
+(call_expression
+  function: [
+    ((identifier) @function)
+    (scoped_identifier
+      name: (identifier) @function)
+    (field_expression
+      field: (field_identifier) @function)
+  ])
+(generic_function
+  function: [
+    ((identifier) @function)
+    (scoped_identifier
+      name: (identifier) @function)
+    (field_expression
+      field: (field_identifier) @function.method)
+  ])
+(function_item
+  (function
+    name: (identifier) @function))
 
-; Attributes
+(function_signature_item
+  (function
+    name: (identifier) @function))
 
-(decorator "@" @attribute (identifier) @attribute)
+(external_function_item
+  (function
+    name: (identifier) @function))
 
-(attribute_item (identifier) @function.macro)
+; ---
+; Macros
+; ---
 
-(attribute_item (scoped_identifier (identifier) @function.macro .))
+(attribute
+  (identifier) @special
+  arguments: (token_tree (identifier) @type)
+  (#eq? @special "derive")
+)
 
-; Labels
+(attribute
+  (identifier) @function.macro)
+(attribute
+  [
+    (identifier) @function.macro
+    (scoped_identifier
+      name: (identifier) @function.macro)
+  ]
+  (token_tree (identifier) @function.macro)?)
 
-(label . (identifier) @label)
+(inner_attribute_item) @attribute
 
-(inst_jmp_to_label "jmp" . (identifier) @label)
+(macro_invocation
+  macro: [
+    ((identifier) @function.macro)
+    (scoped_identifier
+      name: (identifier) @function.macro)
+  ]
+  "!" @function.macro)
 
-(inst_jnz_to_label "jmp" . (identifier) @label)
 
+; -------
 ; Operators
+; -------
 
 [
-  "+"
-  "-"
   "*"
-  "/"
-  "**"
-  "=="
-  "!="
-  "&"
+  "->"
+  "=>"
+  "<="
   "="
-  "++"
-  "+="
-  "@"
+  "=="
   "!"
-  "~"
-  ".."
+  "!="
+  "%"
+  "%="
+  "@"
   "&&"
+  "|"
+  "|="
   "||"
   "^"
-  "<"
-  "<="
-  ">"
-  ">="
-  "<<"
-  ">>"
-  "%"
-  "-="
+  "*"
   "*="
+  "-"
+  "-="
+  "+"
+  "+="
+  "/"
   "/="
-  "%="
-  "&="
-  "|="
-  "^="
-  "<<="
-  ">>="
-  "?"
+  ">"
+  "<"
+  ">="
+  ">>"
+  "<<"
 ] @operator
 
-; Literals
+; -------
+; Paths
+; -------
 
-(number) @number
+(use_declaration
+  argument: (identifier) @namespace)
+(use_wildcard
+  (identifier) @namespace)
+(mod_item
+  name: (identifier) @namespace)
+(scoped_use_list
+  path: (identifier)? @namespace)
+(use_list
+  (identifier) @namespace)
+(use_as_clause
+  path: (identifier)? @namespace
+  alias: (identifier) @namespace)
 
-(boolean) @boolean
+; ---
+; Remaining Paths
+; ---
 
-[
-  (string)
-  (short_string)
-] @string
+(scoped_identifier
+  path: (identifier)? @namespace
+  name: (identifier) @namespace)
+(scoped_type_identifier
+  path: (identifier) @namespace)
 
-; Punctuation
+; -------
+; Remaining Identifiers
+; -------
 
-(attribute_item "#" @punctuation.special)
+"?" @special
 
-[ "." "," ":" ";" "->" "=>" "::" ] @punctuation.delimiter
-
-[ "{" "}" "(" ")" "[" "]" "%{" "%}" ] @punctuation.bracket
-
-(type_parameters [ "<" ">" ] @punctuation.bracket)
-
-(type_arguments [ "<" ">" ] @punctuation.bracket)
-
-; Comment
-
-(comment) @comment @spell
-
-; Errors
-
-(ERROR) @error
+(type_identifier) @type
+(identifier) @variable
+(field_identifier) @variable.other.member
