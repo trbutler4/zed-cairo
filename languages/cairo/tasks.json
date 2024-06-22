@@ -1,0 +1,27 @@
+[
+  {
+    "label": "scarb run",
+    "command": "scarb",
+    "args": ["cairo-run"]
+  },
+  {
+    "label": "scarb build",
+    "command": "scarb",
+    "args": ["build"]
+  },
+  {
+    "label": "scarb fmt",
+    "command": "scarb",
+    "args": ["fmt"]
+  },
+  {
+    "label": "scarb test",
+    "command": "scarb",
+    "args": ["test"]
+  },
+  {
+    "label": "scarb clean",
+    "command": "scarb",
+    "args": ["clean"]
+  }
+]
