@@ -1,6 +1,6 @@
 id = "cairo"
 name = "Cairo"
-version = "0.0.2"
+version = "0.0.3"
 schema_version = 1
 authors = ["Thomas Robert Butler IV trbiv@proton.me"]
 description = "Cairo language support for the Zed editor"
