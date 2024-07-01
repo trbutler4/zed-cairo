@@ -82,8 +82,8 @@
     ((tuple_pattern
       (identifier) @variable))
   ])
-  
-; It needs to be anonymous to not conflict with `call_expression` further below. 
+
+; It needs to be anonymous to not conflict with `call_expression` further below.
 (_
  value: (field_expression
   value: (identifier)? @variable
@@ -95,6 +95,11 @@
 ; -------
 ; Keywords
 ; -------
+
+(for_expression
+  "for" @keyword.control.repeat)
+
+"in" @keyword.control
 
 ((identifier) @keyword.control
   (#match? @keyword.control "^yield$"))
