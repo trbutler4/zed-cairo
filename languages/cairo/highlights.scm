@@ -101,10 +101,6 @@
 
 "in" @keyword.control
 
-((identifier) @keyword.control
-  (#match? @keyword.control "^yield$"))
-
-
 [
   "match"
   "if"
@@ -316,7 +312,6 @@
   "@"
   "&&"
   "|"
-  "|="
   "||"
   "^"
   "*"
