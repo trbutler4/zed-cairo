@@ -20,6 +20,12 @@
     "args": ["test"]
   },
   {
+    "label": "scarb test",
+    "command": "scarb",
+    "args": ["test", "-f", "$ZED_SYMBOL"],
+    "tags": ["cairo-test"]
+  },
+  {
     "label": "scarb clean",
     "command": "scarb",
     "args": ["clean"]
