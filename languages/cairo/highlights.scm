@@ -1,3 +1,43 @@
+;; ---------- keywords -------------------------------------------------
+"fn"      @keyword           ; function definitions
+"struct"  @keyword
+"enum"    @keyword
+"trait"   @keyword
+"impl"    @keyword
+"type"    @keyword
+"use"     @keyword
+"const"   @keyword
+"let"     @keyword
+"return"  @keyword
+
+"if"      @conditional
+"else"    @conditional
+"match"   @conditional
+"while"   @repeat
+"for"     @repeat
+"loop"    @repeat
+"break"   @repeat
+"continue" @repeat
+
+"pub"     @modifier
+"extern"  @modifier
+
+;; ---------- identifiers & types --------------------------------------
+(identifier)         @variable
+(type_identifier)    @type
+(field_identifier)   @property
+(shorthand_field_identifier) @property
+
+;; ---------- literals -------------------------------------------------
+(numeric_literal)         @number
+(string_literal)          @string
+(shortstring_literal)     @string
+(boolean_literal)         @boolean
+(primitive_type)          @type.builtin
+
+;; ---------- comments -------------------------------------------------
+(line_comment)       @comment
+
 ; ; -------
 ; ; Tree-Sitter doesn't allow overrides in regards to captures,
 ; ; though it is possible to affect the child node of a captured
