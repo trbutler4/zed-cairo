@@ -16,6 +16,7 @@
   (field_expression)
   (tuple_expression)
   (array_expression)
+  (function_item)
 
   (token_tree)
 ] @indent
@@ -132,3 +133,10 @@
   (#not-same-line? @in @indent)
   (#set! "scope" "all")
 )
+
+(function_item
+  body: (_) @indent)
+
+; Handle functions with attributes like #[constructor]
+(attribute_item
+  (_) @indent)

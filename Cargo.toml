@@ -1,17 +1,13 @@
 [package]
-name = "zed-cairo"
+name = "zed_cairo"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-zed_extension_api = "0.0.6"
+zed_extension_api = "0.5.0"
 
 [lib]
+path = "src/cairo.rs"
 crate-type = ["cdylib"]
-
-[language_servers.cairo]
-name = "Zed Cairo LSP"
-language = "cairo"
-
