@@ -22,6 +22,11 @@ impl zed::Extension for CairoExtension {
         // Log that we found scarb
         eprintln!("Cairo LSP: Found scarb at: {:?}", path);
 
+        // Log the command being executed
+        eprintln!(
+            "Cairo LSP: Executing command: {:?} cairo-language-server --stdio",
+            path
+        );
         Ok(zed::Command {
             command: path,
             args: vec!["cairo-language-server".into(), "--stdio".into()],
