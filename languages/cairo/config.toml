@@ -1,3 +1,9 @@
+name = "Cairo"
+grammar = "cairo"
+path_suffixes = ["cairo"]
+line_comments = ["//"]
+tab_size = 4
+
 # autoclose_before = ",;:.=>)]}\"'"
 # brackets = [
 #     { start = "{", end = "}", close = true, newline = true },
@@ -7,8 +13,3 @@
 #     { start = "'", end = "'", close = true, newline = false },
 #     { start = "<", end = ">", close = false, newline = false },
 # ]
-name = "Cairo"
-grammar = "cairo"
-path_suffixes = ["cairo"]
-line_comments = ["//"]
-tab_size = 4
