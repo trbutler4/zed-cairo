@@ -3,7 +3,6 @@ use zed_extension_api::{self as zed, Result};
 
 struct CairoExtension;
 
-// ---------- platform-specific defaults --------------------------------
 #[cfg(target_os = "macos")]
 fn default_scarb_cache_dir() -> Option<PathBuf> {
     dirs::home_dir().map(|h| h.join("Library").join("Caches").join("com.swmansion.scarb"))
@@ -76,7 +75,8 @@ impl zed::Extension for CairoExtension {
     ) -> Result<zed::Command> {
         // Simple logging to debug LSP startup
         eprintln!("Cairo LSP: Attempting to locate scarb");
-
+        eprintln!("lsp id: {}", _language_server_id);
+        eprintln!("FINALFINALFINAL-------");
         let path = worktree
             .which("scarb")
             .ok_or_else(|| "scarb must be installed via asdf".to_string())?;
@@ -101,37 +101,31 @@ impl zed::Extension for CairoExtension {
         _: &zed::LanguageServerId,
         _: &zed::Worktree,
     ) -> Result<Option<serde_json::Value>> {
+        eprintln!("Cairo-ext: workspace_configuration called");
         let corelib = PathBuf::from(
             "/Users/francos/Library/Caches/com.swmansion.scarb/registry/std/v2.11.4/",
         );
 
-        Ok(Some(serde_json::json!({
-            "settings": {
-                "cairo1": {
-                    "corelibPath": corelib,
-                    "enableProcMacros": true,
-                    "enableLinter": true,
-                    "traceMacroDiagnostics": false
-                }
-            }
-        })))
+        let cfg = serde_json::json!({
+            "cairo1.corelibPath": corelib,
+            "cairo1.traceMacroDiagnostics": false,
+            "cairo1.enableProcMacros": true,
+            "cairo1.enableLinter": true
+        });
+        eprintln!("Cairo-ext: workspace config to send = {cfg}");
+        Ok(Some(cfg))
     }
 
-    fn language_server_additional_workspace_configuration(
+    fn language_server_initialization_options(
         &mut self,
-        _ls: &zed::LanguageServerId,
-        _target_ls: &zed::LanguageServerId,
+        _id: &zed::LanguageServerId,
         _worktree: &zed::Worktree,
     ) -> Result<Option<serde_json::Value>> {
-        let corelib = PathBuf::from(
-            "/Users/francos/Library/Caches/com.swmansion.scarb/registry/std/v2.11.4/",
-        );
-        Ok(Some(serde_json::json!([
-            corelib, // cairo1.corelibPath
-            false,   // cairo1.traceMacroDiagnostics
-            true,    // cairo1.enableProcMacros
-            true     // cairo1.enableLinter
-        ])))
+        eprintln!("Cairo-ext: LS initialization_options called");
+        Ok(Some(serde_json::json!({
+            // Tell Zed to mask this capability entirely
+            "disableCapabilities": ["documentHighlightProvider"]
+        })))
     }
 }
 
