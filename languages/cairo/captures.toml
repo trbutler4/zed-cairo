@@ -1,0 +1,9 @@
+[captures]
+# colour `struct` the same as type names
+type.keyword = "storage.type"
+namespace.keyword = "entity.name.namespace"
+use.keyword = "keyword"
+keyword.modifier = "storage.modifier"
+variable.parameter = "variable.parameter"
+variable.builtin = "variable.builtin"
+property = "variable.other.member"
