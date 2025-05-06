@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   homebrew:
@@ -11,6 +11,6 @@ jobs:
       - uses: huacnlee/zed-extension-action@v1
         with:
           extension-name: cairo
-          push-to: trbutler4/extensions
+          push-to: 0xpantera/extensions
         env:
           COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}

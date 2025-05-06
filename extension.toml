@@ -1,6 +1,6 @@
-id = "cairo"
+id = "cairo-lang"
 name = "Cairo"
-version = "0.0.8"
+version = "0.1.0"
 schema_version = 1
 authors = ["Franco 0xpantera@proton.me"]
 description = "Cairo language support for Zed"
@@ -13,4 +13,8 @@ rev = "4c6a25680546761b80a710ead1dd34e76c203125"
 [language_servers.cairo]
 name = "Cairo Language Server"
 languages = ["Cairo"]
-supports_workspace_configuration = true
+
+[[capabilities]]
+kind = "process:exec"
+command = "scarb"
+args = ["cache", "path"]
