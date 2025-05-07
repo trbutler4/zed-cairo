@@ -8,7 +8,6 @@ edition = "2021"
 [dependencies]
 zed_extension_api = "0.4.0"
 
-
 [lib]
 path = "src/cairo.rs"
 crate-type = ["cdylib"]

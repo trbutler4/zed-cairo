@@ -1,10 +1,14 @@
-id = "cairo-lang"
+id = "cairo"
 name = "Cairo"
 version = "0.1.0"
 schema_version = 1
-authors = ["Franco 0xpantera@proton.me"]
+authors = [
+    "Thomas Robert Butler IV trbiv@proton.me",
+    "Okhai Omotuebe okhaio@protonmail.com",
+    "Franco 0xpantera@proton.me",
+]
 description = "Cairo language support for Zed"
-repository = "https://github.com/0xpantera/zed-cairo"
+repository = "https://github.com/trbutler4/zed-cairo"
 
 [grammars.cairo]
 repository = "https://github.com/starkware-libs/tree-sitter-cairo"
