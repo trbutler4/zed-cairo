@@ -2,7 +2,7 @@
   {
     "label": "scarb run",
     "command": "scarb",
-    "args": ["cairo-run"]
+    "args": ["run"]
   },
   {
     "label": "scarb build",
