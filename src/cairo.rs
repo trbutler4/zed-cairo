@@ -51,10 +51,14 @@ impl zed::Extension for CairoExtension {
 
         let cfg = serde_json::json!({
             "cairo1.corelibPath": corelib,
-            "cairo1.traceMacroDiagnostics": false,
+            "cairo1.traceMacroDiagnostics": true,
             "cairo1.enableProcMacros": true,
-            "cairo1.enableLinter": true
+            "cairo1.enableLinter": true,
+            "cairo1.macroExpansionDepth": 5,
+            "cairo1.showMacroExpansions": true
         });
+
+        eprintln!("Cairo-ext: Procedural macro config enabled: {}", cfg);
         Ok(Some(cfg))
     }
 
