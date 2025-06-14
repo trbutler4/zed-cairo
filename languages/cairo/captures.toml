@@ -1,9 +1,51 @@
 [captures]
-# colour `struct` the same as type names
-type.keyword = "storage.type"
-namespace.keyword = "entity.name.namespace"
-use.keyword = "keyword"
-keyword.modifier = "storage.modifier"
-variable.parameter = "variable.parameter"
-variable.builtin = "variable.builtin"
+# ═══════════════════════════════════════════════════════════════════
+#                        CAIRO CAPTURE MAPPINGS
+# ═══════════════════════════════════════════════════════════════════
+
+# ─────────────── KEYWORDS ──────────────────────────────────────────
+keyword = "keyword.control"
+"keyword.function" = "keyword.other.fn"
+"keyword.modifier" = "storage.modifier"
+"namespace.keyword" = "keyword.other.namespace"
+"use.keyword" = "keyword.control.import"
+
+# ─────────────── TYPES ──────────────────────────────────────────────
+"type.builtin" = "support.type.primitive"
+"type.keyword" = "storage.type"
+"type.definition" = "entity.name.type.definition"
+
+# ─────────────── FUNCTIONS ─────────────────────────────────────────
+"function.definition" = "entity.name.function.definition"
+"function.call" = "entity.name.function"
+
+# ─────────────── VARIABLES & PARAMETERS ────────────────────────────
+"variable.parameter" = "variable.parameter"
+"variable.builtin" = "variable.language"
+
+# ─────────────── NAMESPACES & MODULES ──────────────────────────────
+namespace = "entity.name.namespace"
+"namespace.definition" = "entity.name.namespace.definition"
+
+# ─────────────── PROPERTIES & FIELDS ───────────────────────────────
 property = "variable.other.member"
+
+# ─────────────── LITERALS ──────────────────────────────────────────
+boolean = "constant.language.boolean"
+string = "string.quoted"
+number = "constant.numeric"
+
+# ─────────────── COMMENTS ──────────────────────────────────────────
+comment = "comment.line"
+
+# ─────────────── OPERATORS ─────────────────────────────────────────
+operator = "keyword.operator"
+
+# ─────────────── PUNCTUATION ───────────────────────────────────────
+"punctuation.special" = "punctuation.definition.special"
+"punctuation.delimiter" = "punctuation.separator"
+"punctuation.bracket" = "punctuation.section"
+
+# ─────────────── MACROS & ATTRIBUTES ───────────────────────────────
+macro = "entity.name.function.macro"
+attribute = "storage.modifier.attribute"
